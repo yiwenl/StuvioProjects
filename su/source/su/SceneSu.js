@@ -23,7 +23,7 @@
 
 		this.cameraPositions = SuModel.cameraPositions;
 		window.addEventListener("keydown", this._onSave.bind(this));
-		GL.canvas.addEventListener("mousedown", this._onMouseDown.bind(this));
+		// GL.canvas.addEventListener("mousedown", this._onMouseDown.bind(this));
 
 		params.constellationIndex = 0;
 		this._onConstellationChange();
@@ -61,7 +61,6 @@
 
 	p._onConstellationChange = function() {
 		var path = Sutils.getDrawingPath(params.constellationIndex);
-
 		var cameraPos = this.cameraPositions[params.constellationIndex];
 		if(cameraPos) {
 			this.sceneRotation.setCameraPos(cameraPos.quat);
@@ -71,6 +70,7 @@
 		var that = this;
 
 		if(path != '') {
+			console.log("Path : ", path, params.constellationIndex);
 			var img = new Image();
 			img.addEventListener('load', this._onImageLoaded.bind(this));
 			img.src = path;

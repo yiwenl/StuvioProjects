@@ -15,7 +15,7 @@ gulp.task('watch', function() {
 
 gulp.task('browser-sync', function() {
 	browserSync({
-			proxy: 'http://localhost:8888/projects/Stuvio/su/',
+			proxy: 'http://localhost:8888/projects/StuvioProjects/su/',
 			watchOptions: {
 			debounceDelay: 1000
 		}
