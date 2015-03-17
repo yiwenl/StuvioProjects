@@ -36,5 +36,19 @@ gulp.task('su', function() {
 });
 
 
+gulp.task('data', function() {
+  gulp.src('../source/SuData.js')
+	.pipe(closureCompiler({
+	  compilerPath: 'compiler/compiler.jar',
+	  fileName: 'su-data-min.js'
+	}))
+	.on('error', function(err){
+		console.log(err.message);
+		this.end();
+	})
+	.pipe(gulp.dest('../source'));
+});
+
+
 gulp.task('closure', ['su']);
 gulp.task('default', ['closure', 'browser-sync', 'watch']);

@@ -27,6 +27,27 @@
 
 		params.constellationIndex = 0;
 		this._onConstellationChange();
+
+
+		var stars = SuModel.stars;
+		var newStars = [];
+		var excludeList = ["constellation", "constellationIndex", "distance"];
+
+		for(var i=0; i<stars.length; i++) {
+			var s = stars[i];
+			var o = {};
+			for(var ss in s ) {
+				if(excludeList.indexOf(ss) == -1) {
+					o[ss] = s[ss];
+				}
+			}
+
+			o.ra = getFloat(s.ra);
+			o.de = getFloat(s.de);
+			newStars.push(o);
+		}
+
+		// saveJson(newStars);
 	}
 
 	var p = SceneSu.prototype = new bongiovi.Scene();
@@ -73,7 +94,7 @@
 			console.log("Path : ", path, params.constellationIndex);
 			var img = new Image();
 			img.addEventListener('load', this._onImageLoaded.bind(this));
-			img.src = path;
+			img.src = 'assets/images/hevelius/' + path;
 			this._vCircleBg.targetAlpha = 1;
 			this._vDrawings.tweenAlpha(0, 0);
 		} else {

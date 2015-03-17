@@ -3,7 +3,8 @@
     "name": "SU 宿",
     "version": "1.0.0",
     "authors": [
-        "Yi-Wen LIN <bongiovi015@gmail.com> (http://blog.bongiovi.tw)"
+        "Yi-Wen LIN <bongiovi015@gmail.com> (http://blog.bongiovi.tw)",
+        "Bertrand Carrara"
     ],
     "description": "SU 宿"
 }
