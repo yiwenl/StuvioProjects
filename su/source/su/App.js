@@ -14,6 +14,8 @@
 	p._init = function() {
 		bongiovi.SimpleImageLoader.load([
 			"assets/images/bg.jpg",
+			"assets/images/bgInvert.jpg",
+			"assets/images/ConstellationCircleInvert.png",
 			"assets/images/ConstellationCircle.png",
 			"assets/images/milkyWayCopy.png",
 			"assets/images/starLine.png"
@@ -22,6 +24,7 @@
 
 	p._init3D = function(imgs) {
 		SuModel.images = imgs;
+		SuModel.currentState = {};
 		this._scene = new SceneSu();
 		GL.setSize(this._canvas.width, this._canvas.height);
 

@@ -16,14 +16,17 @@
 			cameraRadius:500
 		};
 
+		GL.gl.lineWidth(1.5);
+
 		// this._initGUI();
-		this.sceneRotation.rotateMargin = 200;
+		this.sceneRotation.rotateMargin = 100;
 		this.sceneRotation.inverseControl(true);
 		this._invert = false;
 
 		this.cameraPositions = SuModel.cameraPositions;
 		window.addEventListener("keydown", this._onSave.bind(this));
-		// GL.canvas.addEventListener("mousedown", this._onMouseDown.bind(this));
+		GL.canvas.addEventListener("touchstar", this._onMouseDown.bind(this));
+		GL.canvas.addEventListener("mousedown", this._onMouseDown.bind(this));
 
 		params.constellationIndex = 0;
 		this._onConstellationChange();
@@ -70,6 +73,7 @@
 		var that = this;
 
 		if(path != '') {
+			path = path.replace("hevelius", "heveliusInvert")
 			console.log("Path : ", path, params.constellationIndex);
 			var img = new Image();
 			img.addEventListener('load', this._onImageLoaded.bind(this));
@@ -118,7 +122,7 @@
 
 	p._initTextures = function() {
 		gl = GL.gl;
-		this._textBG = new GLTexture(SuModel.images.bg);
+		this._textBG = new GLTexture(SuModel.images.bgInvert);
 		this._textStar = new GLTexture(SuModel.images.starLine);
 		this._textCircleBg = new GLTexture(SuModel.images.ConstellationCircle);
 		this._textMilkyCopy = new GLTexture(SuModel.images.milkyWayCopy);
@@ -150,18 +154,16 @@
 
 	p.render = function() {
 		params.cameraRadius = this.camera.radius.value;
+		this._saveState();
 		if(this._invert) {
 			this.renderInvert();
 			return;
 		}
 
-		gl.lineWidth(1.5);
-
 		gl.disable(gl.DEPTH_TEST);
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
 		this._vCopy.render(this._textBG);
-
 
 		GL.setMatrices(this.camera);
 		GL.rotate(this.sceneRotation.matrix);
@@ -170,27 +172,23 @@
 		this._vEcliptic.render();
 		this._vCopyMilkyway.render(this._textMilkyCopy);
 		this._vCopyEliptic.render(this._textMilkyCopy);
-//*		
+
 		this._vStars.render(this._textStar);
 		this._vLines.render();
-		// gl.disable(gl.DEPTH_TEST);
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
 		
 		if(this._textDrawing) {
 			this._vCircleBg.render(this._textCircleBg);
-			GL.enableAdditiveBlending();
-			this._vBlack.render(this._textCircleBg);
-			GL.enableAlphaBlending();
+			// GL.enableAdditiveBlending();
+			// this._vBlack.render(this._textCircleBg);
+			// GL.enableAlphaBlending();
 			this._vDrawings.render(this._textDrawing);	
 		}
 
 		if(this._textDesc) {
 			this._vDesc.render(this._textDesc);
 		}
-
-//*/
-
 	}
 
 	p.renderInvert = function() {
@@ -223,9 +221,7 @@
 			this._vDrawings.render(this._textDrawing);	
 			GL.enableAlphaBlending();
 			// this._vCircleBg.render(this._textCircleBg);
-			
 			// this._vBlack.render(this._textCircleBg);
-			
 		}
 
 		if(this._textDesc) {
@@ -239,6 +235,13 @@
 		GL.rotate(this.rotationFront);
 		this._effectComposer.render(this._fbo.getTexture() );
 		this._vCopy.render(this._effectComposer.getTexture());
+	};
+
+
+	p._saveState = function() {
+		SuModel.currentState.camera = this.sceneRotation.tempRotation;
+		SuModel.currentState.cameraDepth = this.camera.radius.value;
+		SuModel.currentState.constellationIndex = params.constellationIndex;
 	};
 
 	p._onMouseDown = function(e) {
