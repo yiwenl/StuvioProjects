@@ -73,8 +73,8 @@
 		var that = this;
 
 		if(path != '') {
-			path = path.replace("hevelius", "heveliusInvert")
-			console.log("Path : ", path, params.constellationIndex);
+			// path = path.replace("hevelius", "heveliusInvert")
+			// console.log("Path : ", path, params.constellationIndex);
 			var img = new Image();
 			img.addEventListener('load', this._onImageLoaded.bind(this));
 			img.src = path;
@@ -122,7 +122,8 @@
 
 	p._initTextures = function() {
 		gl = GL.gl;
-		this._textBG = new GLTexture(SuModel.images.bgInvert);
+		this._textBG = new GLTexture(SuModel.images.bg);
+		this._textBGInvert = new GLTexture(SuModel.images.bgInvert);
 		this._textStar = new GLTexture(SuModel.images.starLine);
 		this._textCircleBg = new GLTexture(SuModel.images.ConstellationCircle);
 		this._textMilkyCopy = new GLTexture(SuModel.images.milkyWayCopy);
@@ -180,9 +181,9 @@
 		
 		if(this._textDrawing) {
 			this._vCircleBg.render(this._textCircleBg);
-			// GL.enableAdditiveBlending();
-			// this._vBlack.render(this._textCircleBg);
-			// GL.enableAlphaBlending();
+			GL.enableAdditiveBlending();
+			this._vBlack.render(this._textCircleBg);
+			GL.enableAlphaBlending();
 			this._vDrawings.render(this._textDrawing);	
 		}
 
