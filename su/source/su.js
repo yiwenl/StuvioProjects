@@ -11,7 +11,7 @@ var Generator = (function() {
             type: 'number',
             label: 'Constellation Index',
             description: 'Constellation Index',
-            range: [ 0, 88 ],
+            range: [ 0, 87 ],
             value: 0,
             step: 1
         },

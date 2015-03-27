@@ -85,6 +85,7 @@
 		this.shader.uniform("rotation", "uniformMatrix4fv", this._rotation.matrix);
 		this.shader.uniform("cameraRadius", "uniform1f", params.cameraRadius);
 		this.shader.uniform("lineColor", "uniform4fv", this._lineColor);
+		this.shader.uniform("isInvert", "uniform1f", params.isInvert);
 		// texture.bind(0);
 		GL.draw(this.mesh);
 	};

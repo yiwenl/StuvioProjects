@@ -68,9 +68,9 @@
 
 
 	p.refresh = function(mSettings) {
-		if(params.constellationIndex != Math.floor(mSettings.constellationIndex.value)-1) {
+		if(params.constellationIndex != Math.floor(mSettings.constellationIndex.value)) {
 			console.debug("Change constellation", params.constellationIndex , Math.floor(mSettings.constellationIndex.value));
-			params.constellationIndex = Math.floor(mSettings.constellationIndex.value)-1;
+			params.constellationIndex = Math.floor(mSettings.constellationIndex.value);
 
 			this._onConstellationChange();
 		}
@@ -91,6 +91,8 @@
 		var that = this;
 		this._loadedCount = 0;
 		if(path != '') {
+			path = "./assets/images/hevelius/" + path;
+			console.log("Path : ", path);
 			var img = new Image();
 			img.addEventListener('load', this._onImageLoaded.bind(this));
 			img.src = path;
@@ -112,7 +114,12 @@
 		if(!oDetail) return;
 		var imgDesc = new Image();
 		imgDesc.addEventListener('load', this._onDescImageLoaded.bind(this));
-		imgDesc.src = "assets/images/copy/" + oDetail.abb + ".png";
+		if(this._invert) {
+			imgDesc.src = "assets/images/copyInvert/" + oDetail.abb + ".png";
+		} else {
+			imgDesc.src = "assets/images/copy/" + oDetail.abb + ".png";	
+		}
+		
 		this._vDesc.tweenAlpha(0, 0);
 
 		this._vCopyMilkyway.targetAlpha = 0;
@@ -128,18 +135,24 @@
 		}
 
 		this._loadedCount++;
-		if(this._loadedCount == 2) this._vDrawings.tweenAlpha(0, 1);
+		if(this._loadedCount == 2) {
+			this._vDrawings.tweenAlpha(0, 1);
+			this._vDesc.tweenAlpha(0, 1);
+		}
 	};
 
 	p._onImageInvertLoaded = function(e) {
-		console.log("invert Loaded");
 		if(this._textDrawingInvert == undefined) {
 			this._textDrawingInvert = new GLTexture(e.target);
 		} else {
 			this._textDrawingInvert.updateTexture(e.target);
 		}
 
-		this._vDrawings.tweenAlpha(0, 1);
+		this._loadedCount++;
+		if(this._loadedCount == 2) {
+			this._vDrawings.tweenAlpha(0, 1);
+			this._vDesc.tweenAlpha(0, 1);
+		}
 	};
 
 
@@ -211,6 +224,10 @@
 		this._vLines.render();
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
+
+		if(this._textDesc) {
+			this._vDesc.render(this._textDesc);
+		}
 		
 		if(this._textDrawing) {
 			this._vCircleBg.render(this._textCircleBg);
@@ -219,19 +236,14 @@
 			GL.enableAlphaBlending();
 			this._vDrawings.render(this._textDrawing);	
 		}
-
-		if(this._textDesc) {
-			GL.enableAlphaBlending();
-			this._vDesc.render(this._textDesc);
-
-		}
+		
 	}
 
 	p.renderInvert = function() {
 		gl.lineWidth(1.5);
-
-		GL.clear(0, 0, 0, 0);
 		gl.disable(gl.DEPTH_TEST);
+		GL.clear(0, 0, 0, 0);
+		GL.enableAlphaBlending();
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
 		this._vCopy.render(this._textBGInvert);
@@ -246,7 +258,6 @@
 
 		this._vStars.render(this._textStar);
 		this._vLines.render();
-		gl.disable(gl.DEPTH_TEST);
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
 			

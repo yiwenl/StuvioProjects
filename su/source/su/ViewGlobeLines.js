@@ -87,6 +87,7 @@
 		this.shader.uniform("color", "uniform3fv", [grey, grey, grey]);
 		this.shader.uniform("opacity", "uniform1f", .05);
 		this.shader.uniform("cameraRadius", "uniform1f", params.cameraRadius);
+		this.shader.uniform("isInvert", "uniform1f", params.isInvert);
 		GL.draw(this.mesh);
 	};
 })();
