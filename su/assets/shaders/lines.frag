@@ -13,7 +13,7 @@ void main(void) {
     	gl_FragColor.a *= .275 * vAlphaOffset;
     	if(invert > 0.0) {
     		gl_FragColor.rgb = vec3(.0);
-    		gl_FragColor.a = vAlphaOffset * 1.5;
+    		// gl_FragColor.a = vAlphaOffset * 1.5;
     	}
     }
     

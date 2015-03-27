@@ -9,5 +9,5 @@ void main(void) {
     gl_FragColor = vec4(color, opacity);
     gl_FragColor *= vAlphaOffset;
 
-    if(isInvert > 0.0) gl_FragColor = vec4(vec3(.01), .3);
+    if(isInvert > 0.0) gl_FragColor.rgb = vec3(1.0) - gl_FragColor.rgb;
 }

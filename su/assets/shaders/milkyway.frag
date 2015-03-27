@@ -14,5 +14,5 @@ void main(void) {
     gl_FragColor = lineColor;
     gl_FragColor.a *= (.3 + (a*.7)) * vAlphaOffset;
 
-    if(isInvert > 0.0) gl_FragColor = vec4(vec3(.1), .5);
+    if(isInvert > 0.0) gl_FragColor = vec3(1.0) - gl_FragColor.rgb;
 }

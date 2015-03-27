@@ -242,7 +242,9 @@
 	p.renderInvert = function() {
 		gl.lineWidth(1.5);
 		gl.disable(gl.DEPTH_TEST);
+
 		GL.clear(0, 0, 0, 0);
+
 		GL.enableAlphaBlending();
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
@@ -260,14 +262,26 @@
 		this._vLines.render();
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
-			
-		if(this._textDrawingInvert) {
-			this._vDrawings.render(this._textDrawingInvert);	
-		}
 
 		if(this._textDesc) {
+			// gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);	
+			// gl.blendEquation( gl.FUNC_SUBTRACT);
 			this._vDesc.render(this._textDesc);
+			// gl.blendEquation( gl.FUNC_ADD);
+			// GL.enableAlphaBlending();
 		}
+			
+		if(this._textDrawingInvert) {
+			gl.blendEquation( gl.FUNC_REVERSE_SUBTRACT);
+			// this._vCircleBg.render(this._textCircleBg);
+			this._vDrawings.render(this._textDrawing);	
+			gl.blendEquation( gl.FUNC_ADD);
+			GL.enableAdditiveBlending();
+			this._vBlack.render(this._textCircleBg);
+			GL.enableAlphaBlending();
+		}
+
+
 
 	};
 
