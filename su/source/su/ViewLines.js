@@ -54,6 +54,7 @@
 		this.shader.bind();
 		this.shader.uniform("currentIndex", "uniform1f", params.constellationIndex);
 		this.shader.uniform("cameraRadius", "uniform1f", params.cameraRadius);
+		this.shader.uniform("invert", "uniform1f", params.isInvert?1.0:0.0);
 		GL.draw(this.mesh);
 	};
 
