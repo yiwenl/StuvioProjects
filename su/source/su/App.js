@@ -16,6 +16,7 @@
 			"assets/images/bg.jpg",
 			"assets/images/bgInvert.jpg",
 			"assets/images/ConstellationCircleInvert.png",
+			"assets/images/ConstellationCircleInvertAdd.png",
 			"assets/images/ConstellationCircle.png",
 			"assets/images/milkyWayCopy.png",
 			"assets/images/starLine.png"
@@ -37,6 +38,11 @@
 			// this._scene.setConstellationIndex(mSettings.constellationIndex.value-1 );
 			this._scene.refresh(mSettings);
 		}
+	};
+
+
+	p.isDone = function() {
+		return this._scene == undefined ? false : this._scene.isDone();
 	};
 
 

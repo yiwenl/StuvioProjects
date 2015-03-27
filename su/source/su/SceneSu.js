@@ -9,7 +9,6 @@
 
 	SceneSu = function() {
 		bongiovi.Scene.call(this);
-		// this.camera.setPerspective(45*Math.PI/180, GL.aspectRatio, 5, 3000);
 
 		window.params = {
 			constellationIndex:-1,
@@ -18,6 +17,7 @@
 		};
 
 		GL.gl.lineWidth(1.5);
+		gl.disable(gl.DEPTH_TEST);
 
 		// this._initGUI();
 		this.sceneRotation.rotateMargin = 100;
@@ -100,6 +100,7 @@
 			// console.log("Image doesn't exist : ", Sutils.getConstellatinDetail(params.constellationIndex));
 			this._vDrawings.targetAlpha = 0;
 			this._vCircleBg.targetAlpha = 0;
+			this._loadedCount++;
 		}
 
 		var oDetail = Sutils.getConstellatinDetail(params.constellationIndex);
@@ -124,9 +125,12 @@
 		} else {
 			this._textDrawing.updateTexture(e.target);
 		}
-
-		this._vDrawings.tweenAlpha(0, 1);
 		
+		this._loadedCount++;
+		if(this._loadedCount == 3) {
+			this._vDesc.tweenAlpha(0, 1);
+			this._vDrawings.tweenAlpha(0, 1);
+		}
 	};
 
 	p._onDescImageLoaded = function(e) {
@@ -137,8 +141,9 @@
 		}
 
 		this._loadedCount++;
-		if(this._loadedCount == 2) {
+		if(this._loadedCount == 3) {
 			this._vDesc.tweenAlpha(0, 1);
+			this._vDrawings.tweenAlpha(0, 1);
 		}
 		
 	};
@@ -151,8 +156,9 @@
 		}
 
 		this._loadedCount++;
-		if(this._loadedCount == 2) {
+		if(this._loadedCount == 3) {
 			this._vDesc.tweenAlpha(0, 1);
+			this._vDrawings.tweenAlpha(0, 1);
 		}
 	};
 
@@ -163,6 +169,8 @@
 		this._textBGInvert = new GLTexture(SuModel.images.bgInvert);
 		this._textStar = new GLTexture(SuModel.images.starLine);
 		this._textCircleBg = new GLTexture(SuModel.images.ConstellationCircle);
+		this._textCircleBgInvert = new GLTexture(SuModel.images.ConstellationCircleInvert);
+		this._textCircleBgInvertAdd = new GLTexture(SuModel.images.ConstellationCircleInvertAdd);
 		this._textMilkyCopy = new GLTexture(SuModel.images.milkyWayCopy);
 	};
 
@@ -187,16 +195,21 @@
 		this._effectComposer.addPass(this._passInvert);
 	};
 
+	p.isDone = function() {
+		return (this.sceneRotation._slerp == -1) && (this._loadedCount == 3);
+	};
+
 
 	p.render = function() {
 		params.cameraRadius = this.camera.radius.value;
 		this._saveState();
+
 		if(this._invert) {
 			this.renderInvert();
 			return;
 		}
 
-		gl.disable(gl.DEPTH_TEST);
+		
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
 		this._vCopy.render(this._textBG);
@@ -229,11 +242,6 @@
 	}
 
 	p.renderInvert = function() {
-		gl.lineWidth(1.5);
-		gl.disable(gl.DEPTH_TEST);
-
-		GL.clear(0, 0, 0, 0);
-
 		GL.enableAlphaBlending();
 		GL.setMatrices(this.cameraOtho);
 		GL.rotate(this.rotationFront);
@@ -253,23 +261,19 @@
 		GL.rotate(this.rotationFront);
 
 		if(this._textDesc) {
-			// gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);	
-			// gl.blendEquation( gl.FUNC_SUBTRACT);
 			this._vDesc.render(this._textDescInvert);
-			// gl.blendEquation( gl.FUNC_ADD);
-			// GL.enableAlphaBlending();
 		}
 			
 		if(this._textDrawing) {
+			this._vCircleBg.render(this._textCircleBgInvertAdd);
 			gl.blendEquation( gl.FUNC_REVERSE_SUBTRACT);
-			// this._vCircleBg.render(this._textCircleBg);
+			this._vCircleBg.render(this._textCircleBgInvert);
 			this._vDrawings.render(this._textDrawing);	
 			gl.blendEquation( gl.FUNC_ADD);
 			GL.enableAdditiveBlending();
 			this._vBlack.render(this._textCircleBg);
 			GL.enableAlphaBlending();
 		}
-
 	};
 
 
