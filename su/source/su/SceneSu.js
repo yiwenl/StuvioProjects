@@ -92,20 +92,14 @@
 		this._loadedCount = 0;
 		if(path != '') {
 			path = "./assets/images/hevelius/" + path;
-			console.log("Path : ", path);
 			var img = new Image();
 			img.addEventListener('load', this._onImageLoaded.bind(this));
 			img.src = path;
-			
-			var pathInvert = path.replace("hevelius", "heveliusInvert");
-			var imgInvert = new Image();
-			imgInvert.addEventListener('load', this._onImageInvertLoaded.bind(this));
-			imgInvert.src = pathInvert;
 
 			this._vCircleBg.targetAlpha = 1;
 			this._vDrawings.tweenAlpha(0, 0);
 		} else {
-			console.log("Image doesn't exist : ", Sutils.getConstellatinDetail(params.constellationIndex));
+			// console.log("Image doesn't exist : ", Sutils.getConstellatinDetail(params.constellationIndex));
 			this._vDrawings.targetAlpha = 0;
 			this._vCircleBg.targetAlpha = 0;
 		}
@@ -114,14 +108,13 @@
 		if(!oDetail) return;
 		var imgDesc = new Image();
 		imgDesc.addEventListener('load', this._onDescImageLoaded.bind(this));
-		if(this._invert) {
-			imgDesc.src = "assets/images/copyInvert/" + oDetail.abb + ".png";
-		} else {
-			imgDesc.src = "assets/images/copy/" + oDetail.abb + ".png";	
-		}
+		imgDesc.src = "assets/images/copy/" + oDetail.abb + ".png";	
+
+		var imgDescInvert = new Image();
+		imgDescInvert.addEventListener('load', this._onDescInvertImageLoaded.bind(this));
+		imgDescInvert.src = "assets/images/copyInvert/" + oDetail.abb + ".png";
 		
 		this._vDesc.tweenAlpha(0, 0);
-
 		this._vCopyMilkyway.targetAlpha = 0;
 		this._vCopyEliptic.targetAlpha = 0;
 	};
@@ -134,27 +127,9 @@
 			this._textDrawing.updateTexture(e.target);
 		}
 
-		this._loadedCount++;
-		if(this._loadedCount == 2) {
-			this._vDrawings.tweenAlpha(0, 1);
-			this._vDesc.tweenAlpha(0, 1);
-		}
+		this._vDrawings.tweenAlpha(0, 1);
+		
 	};
-
-	p._onImageInvertLoaded = function(e) {
-		if(this._textDrawingInvert == undefined) {
-			this._textDrawingInvert = new GLTexture(e.target);
-		} else {
-			this._textDrawingInvert.updateTexture(e.target);
-		}
-
-		this._loadedCount++;
-		if(this._loadedCount == 2) {
-			this._vDrawings.tweenAlpha(0, 1);
-			this._vDesc.tweenAlpha(0, 1);
-		}
-	};
-
 
 	p._onDescImageLoaded = function(e) {
 		if(this._textDesc == undefined) {
@@ -164,7 +139,25 @@
 		}
 
 		this._loadedCount++;
-		if(this._loadedCount == 2) this._vDrawings.tweenAlpha(0, 1);
+		console.log("Desc Loaded", this._loadedCount);
+		if(this._loadedCount == 2) {
+			this._vDesc.tweenAlpha(0, 1);
+		}
+		
+	};
+
+	p._onDescInvertImageLoaded = function(e) {
+		if(this._textDescInvert == undefined) {
+			this._textDescInvert = new GLTexture(e.target);
+		} else {
+			this._textDescInvert.updateTexture(e.target);
+		}
+
+		this._loadedCount++;
+		console.log("Desc Loaded", this._loadedCount);
+		if(this._loadedCount == 2) {
+			this._vDesc.tweenAlpha(0, 1);
+		}
 	};
 
 
@@ -266,12 +259,12 @@
 		if(this._textDesc) {
 			// gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);	
 			// gl.blendEquation( gl.FUNC_SUBTRACT);
-			this._vDesc.render(this._textDesc);
+			this._vDesc.render(this._textDescInvert);
 			// gl.blendEquation( gl.FUNC_ADD);
 			// GL.enableAlphaBlending();
 		}
 			
-		if(this._textDrawingInvert) {
+		if(this._textDrawing) {
 			gl.blendEquation( gl.FUNC_REVERSE_SUBTRACT);
 			// this._vCircleBg.render(this._textCircleBg);
 			this._vDrawings.render(this._textDrawing);	
@@ -280,8 +273,6 @@
 			this._vBlack.render(this._textCircleBg);
 			GL.enableAlphaBlending();
 		}
-
-
 
 	};
 
