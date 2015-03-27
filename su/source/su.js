@@ -39,7 +39,11 @@ var Generator = (function() {
         generate: function( done ) {
             main.resize();
             main.refresh(this.settings);
-            done()
+            // done()
+
+            setTimeout(function() {
+                done()
+            }, 2000);
         },
 
         destroy: function( done ) {

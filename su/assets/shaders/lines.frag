@@ -1,6 +1,7 @@
 precision mediump float;
 varying vec2 vTextureCoord;
 uniform sampler2D uSampler0;
+uniform float invert;
 varying float vAlphaOffset;
 
 void main(void) {
@@ -10,6 +11,10 @@ void main(void) {
     } else {
     	gl_FragColor = vec4(1.0);
     	gl_FragColor.a *= .275 * vAlphaOffset;
+    	if(invert > 0.0) {
+    		gl_FragColor.rgb = vec3(.0);
+    		gl_FragColor.a = vAlphaOffset * 1.5;
+    	}
     }
     
 }

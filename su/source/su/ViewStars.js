@@ -38,6 +38,7 @@
 		this.shader.bind();
 		this.shader.uniform("texture", "uniform1i", 0);
 		this.shader.uniform("cameraRadius", "uniform1f", params.cameraRadius);
+		this.shader.uniform("invert", "uniform1f", params.isInvert ? 1.0 : 0.0);
 		texture.bind(0);
 		GL.draw(this.mesh);
 	};
