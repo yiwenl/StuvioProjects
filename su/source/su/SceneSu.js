@@ -69,9 +69,7 @@
 
 	p.refresh = function(mSettings) {
 		if(params.constellationIndex != Math.floor(mSettings.constellationIndex.value)) {
-			console.debug("Change constellation", params.constellationIndex , Math.floor(mSettings.constellationIndex.value));
 			params.constellationIndex = Math.floor(mSettings.constellationIndex.value);
-
 			this._onConstellationChange();
 		}
 
@@ -139,7 +137,6 @@
 		}
 
 		this._loadedCount++;
-		console.log("Desc Loaded", this._loadedCount);
 		if(this._loadedCount == 2) {
 			this._vDesc.tweenAlpha(0, 1);
 		}
@@ -154,7 +151,6 @@
 		}
 
 		this._loadedCount++;
-		console.log("Desc Loaded", this._loadedCount);
 		if(this._loadedCount == 2) {
 			this._vDesc.tweenAlpha(0, 1);
 		}
