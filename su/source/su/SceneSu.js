@@ -36,6 +36,7 @@
 		var stars = SuModel.stars;
 		var newStars = [];
 		var excludeList = ["constellation", "constellationIndex", "distance"];
+		this._hasDrawings = true;
 
 		for(var i=0; i<stars.length; i++) {
 			var s = stars[i];
@@ -96,11 +97,12 @@
 
 			this._vCircleBg.targetAlpha = 1;
 			this._vDrawings.tweenAlpha(0, 0);
+			this._hasDrawings = true;
 		} else {
-			// console.log("Image doesn't exist : ", Sutils.getConstellatinDetail(params.constellationIndex));
 			this._vDrawings.targetAlpha = 0;
 			this._vCircleBg.targetAlpha = 0;
 			this._loadedCount++;
+			this._hasDrawings = false;
 		}
 
 		var oDetail = Sutils.getConstellatinDetail(params.constellationIndex);
@@ -231,7 +233,7 @@
 			this._vDesc.render(this._textDesc);
 		}
 		
-		if(this._textDrawing) {
+		if(this._textDrawing && this._hasDrawings) {
 			this._vCircleBg.render(this._textCircleBg);
 			GL.enableAdditiveBlending();
 			this._vBlack.render(this._textCircleBg);
@@ -264,7 +266,7 @@
 			this._vDesc.render(this._textDescInvert);
 		}
 			
-		if(this._textDrawing) {
+		if(this._textDrawing && this._hasDrawings) {
 			this._vCircleBg.render(this._textCircleBgInvertAdd);
 			gl.blendEquation( gl.FUNC_REVERSE_SUBTRACT);
 			this._vCircleBg.render(this._textCircleBgInvert);

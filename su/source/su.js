@@ -20,8 +20,8 @@ var Generator = (function() {
 
         invertColor: {
             type: 'boolean',
-            label: 'Theme',
-            description: 'Change colour theme',
+            label: 'Invert Colour Theme',
+            description: 'Another colour theme',
             value: false
         }
     }

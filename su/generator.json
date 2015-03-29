@@ -1,10 +1,10 @@
 {
     "id": "SU",
-    "name": "SU 宿",
+    "name": "SÙ 宿",
     "version": "1.0.0",
     "authors": [
         "Yi-Wen LIN <bongiovi015@gmail.com> (http://blog.bongiovi.tw)",
-        "Bertrand Carrara"
+        "Bertrand Carrara <carrara.b@gmail.com> (http://bertrandcarrara.com/)"
     ],
-    "description": "SU 宿"
+    "description": "Explore all the constellations and grab one for you."
 }
